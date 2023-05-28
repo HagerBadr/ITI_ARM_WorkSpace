@@ -1,0 +1,87 @@
+/*
+ * led_matrix.c
+ *
+ *  Created on: May 14, 2023
+ *      Author: Hager Badr
+ */
+#include "BIT_MATH.h"
+#include "STD_TYPES.h"
+#include "GPIO_int.h"
+#include "STK_int.h"
+#include "led_matrix_int.h"
+#include "led_matrix_priv.h"
+#include "led_matrix_config.h"
+
+void HLEDMAT_voidInit()
+{
+	/*INTIALIZE ROWS & COLUMS PINS TO be OUTPUT*/
+	MGPIO_voidSetPinMode(HLEDMAT_ROW_PORT,HLEDMAT_R0_PIN,MGPIO_OUTPUT);
+	MGPIO_voidSetPinMode(HLEDMAT_ROW_PORT,HLEDMAT_R1_PIN,MGPIO_OUTPUT);
+	MGPIO_voidSetPinMode(HLEDMAT_ROW_PORT,HLEDMAT_R2_PIN,MGPIO_OUTPUT);
+	MGPIO_voidSetPinMode(HLEDMAT_ROW_PORT,HLEDMAT_R3_PIN,MGPIO_OUTPUT);
+	MGPIO_voidSetPinMode(HLEDMAT_ROW_PORT,HLEDMAT_R4_PIN,MGPIO_OUTPUT);
+	MGPIO_voidSetPinMode(HLEDMAT_ROW_PORT,HLEDMAT_R5_PIN,MGPIO_OUTPUT);
+	MGPIO_voidSetPinMode(HLEDMAT_ROW_PORT,HLEDMAT_R6_PIN,MGPIO_OUTPUT);
+	MGPIO_voidSetPinMode(HLEDMAT_ROW_PORT,HLEDMAT_R7_PIN,MGPIO_OUTPUT);
+
+	MGPIO_voidSetPinMode(HLEDMAT_COLUM_PORT,HLEDMAT_C0_PIN,MGPIO_OUTPUT);
+	MGPIO_voidSetPinMode(HLEDMAT_COLUM_PORT,HLEDMAT_C1_PIN,MGPIO_OUTPUT);
+	MGPIO_voidSetPinMode(HLEDMAT_COLUM_PORT,HLEDMAT_C2_PIN,MGPIO_OUTPUT);
+	MGPIO_voidSetPinMode(HLEDMAT_COLUM_PORT,HLEDMAT_C3_PIN,MGPIO_OUTPUT);
+	MGPIO_voidSetPinMode(HLEDMAT_COLUM_PORT,HLEDMAT_C4_PIN,MGPIO_OUTPUT);
+	MGPIO_voidSetPinMode(HLEDMAT_COLUM_PORT,HLEDMAT_C5_PIN,MGPIO_OUTPUT);
+	MGPIO_voidSetPinMode(HLEDMAT_COLUM_PORT,HLEDMAT_C6_PIN,MGPIO_OUTPUT);
+	MGPIO_voidSetPinMode(HLEDMAT_COLUM_PORT,HLEDMAT_C7_PIN,MGPIO_OUTPUT);
+}
+
+void HLEDMAT_voidDisplay(u8 *Copy_u8Data)
+{
+	u8 Local_u8ColumnIndex = 0;
+	u8 Local_u8RowIndex = 0;
+	u8 Local_u8Bit = 0;
+	static	u8 ROWARRAY[8] = {HLEDMAT_R0_PIN,
+			HLEDMAT_R1_PIN,
+			HLEDMAT_R2_PIN,
+			HLEDMAT_R3_PIN,
+			HLEDMAT_R4_PIN,
+			HLEDMAT_R5_PIN,
+			HLEDMAT_R6_PIN,
+			HLEDMAT_R7_PIN};
+
+	static u8 COLUMARRAY[8]={HLEDMAT_C0_PIN,
+			HLEDMAT_C1_PIN,
+			HLEDMAT_C2_PIN,
+			HLEDMAT_C3_PIN,
+			HLEDMAT_C4_PIN,
+			HLEDMAT_C5_PIN,
+			HLEDMAT_C6_PIN,
+			HLEDMAT_C7_PIN};
+
+	for(Local_u8ColumnIndex=0 ; Local_u8ColumnIndex <8 ; Local_u8ColumnIndex++)
+	{
+		voidDisableALLColumns();
+		for(Local_u8RowIndex=0 ; Local_u8RowIndex <8 ;Local_u8RowIndex++)
+		{
+			Local_u8Bit = GET_BIT(Copy_u8Data[Local_u8ColumnIndex],Local_u8RowIndex);
+			MGPIO_voidSetPinValue(HLEDMAT_ROW_PORT ,ROWARRAY[Local_u8RowIndex], Local_u8Bit);
+		}
+		MGPIO_voidSetPinValue(HLEDMAT_COLUM_PORT,COLUMARRAY[Local_u8ColumnIndex],LOW);
+		STK_voidBusyWait(2500);
+		//_delay_ms(2.5);
+	}
+
+
+}
+
+static void voidDisableALLColumns(void)
+{
+	MGPIO_voidSetPinValue(HLEDMAT_COLUM_PORT,HLEDMAT_C0_PIN,HIGH);
+	MGPIO_voidSetPinValue(HLEDMAT_COLUM_PORT,HLEDMAT_C1_PIN,HIGH);
+	MGPIO_voidSetPinValue(HLEDMAT_COLUM_PORT,HLEDMAT_C2_PIN,HIGH);
+	MGPIO_voidSetPinValue(HLEDMAT_COLUM_PORT,HLEDMAT_C3_PIN,HIGH);
+	MGPIO_voidSetPinValue(HLEDMAT_COLUM_PORT,HLEDMAT_C4_PIN,HIGH);
+	MGPIO_voidSetPinValue(HLEDMAT_COLUM_PORT,HLEDMAT_C5_PIN,HIGH);
+	MGPIO_voidSetPinValue(HLEDMAT_COLUM_PORT,HLEDMAT_C6_PIN,HIGH);
+	MGPIO_voidSetPinValue(HLEDMAT_COLUM_PORT,HLEDMAT_C7_PIN,HIGH);
+
+}
