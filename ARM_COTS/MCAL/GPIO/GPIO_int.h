@@ -21,8 +21,11 @@
 
 #define OUTPUT_PUSH_PULL				0
 #define OUTPUT_OPEN_DRAIN				1
-
-
+/*speed*/
+//#define OUTPUT_LOW_SPEED_2MHZ					0
+//#define OUTPUT_MEDIUM_SPEED_UP_TO_10MHZ			1
+//#define OUTPUT_HIGH_SPEED_UP_TO_50MHZ			2
+//#define OUTPUT_VERY_HIGH_SPEED_UP_TO_100MHZ		3
 
 void MGPIO_voidSetPinOutputType(u8 Copy_u8PortName ,u8 Copy_u8PinNumber, u8 Copy_u8OutputType);
 void MGPIO_voidSetPinMode(u8 Copy_u8PortName ,u8 Copy_u8PinNumber, u8 Copy_u8Mode);
